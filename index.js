@@ -23,12 +23,15 @@ const server = http.createServer((req,res) => {
     res.setHeader("Content-type", "text/html")
     if (URL === "" || URL === "home"){
         res.end(fs.readFileSync('./home.html', 'utf8'))
-        res.setHeader("Content-type", "stylesheet")
-        res.end(fs.readFileSync('./style.css', 'utf8'))
     }else if (URL === "about"){
         res.end(fs.readFileSync(`./${URL}.html`, 'utf8'))
     }else if (URL === "contact-me"){
         res.end(fs.readFileSync(`./${URL}.html`, 'utf8'))
+    }else if(req.url.match("\.css$")){
+        var cssPath = "./style.css";
+        var fileStream = fs.createReadStream(cssPath, "UTF-8");
+        res.writeHead(200, {"Content-Type": "text/css"});
+        fileStream.pipe(res)
     }else{
         res.end(fs.readFileSync('./404.html', 'utf8'))
     }
